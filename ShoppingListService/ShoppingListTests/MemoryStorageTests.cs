@@ -3,6 +3,7 @@ using NUnit.Framework;
 using ShoppingListService.Storage;
 using ShoppingListService.Contracts;
 using System.Collections.Generic;
+using Moq;
 
 namespace ShoppingListTests
 {
@@ -18,10 +19,58 @@ namespace ShoppingListTests
         }
 
         [Test]
+        public void StorageCanGetDrinkDict()
+        {
+            // Act
+            Dictionary<string, Drink> result = Storage.GetDrinkStorage();
+
+            // Assert
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
         public void StorageCanSaveItem()
         {
             // Just test that no exceptions happen
             Storage.Add(new Drink());
+        }
+
+        [Test]
+        public void AddingTwoItemsWithSameNameStoresLastAddedItem()
+        {
+            var firstDrink = new Drink
+            {
+                Name = "Aspalls",
+                Number = 5
+            };
+            var secondDrink = new Drink
+            {
+                Name = "Aspalls",
+                Number = 2
+            };
+
+            // Act
+            this.Storage.Add(firstDrink);
+            this.Storage.Add(secondDrink);
+            var result = this.Storage.Get(firstDrink.Name);
+
+            // Assert
+            Assert.AreEqual(secondDrink, result);
+        }
+
+        [Test]
+        public void AddItemToStorageCallsGetDrinkStorage()
+        {
+            var MockMemStorageService = new Mock<MemoryStorageService>
+            {
+                CallBase = true
+            };
+
+            // Act
+            MockMemStorageService.Object.Add(new Drink());
+
+            // Assert
+            MockMemStorageService.Verify(mm => mm.GetDrinkStorage(), Times.Once);
         }
 
         [Test]

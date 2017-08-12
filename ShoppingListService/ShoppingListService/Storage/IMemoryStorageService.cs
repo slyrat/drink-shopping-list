@@ -11,5 +11,6 @@ namespace ShoppingListService.Storage
         void Add(Drink drink);
         Drink Get(string name);
         List<Drink> GetAll();
+        Dictionary<string, Drink> GetDrinkStorage();
     }
 }
