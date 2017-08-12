@@ -36,15 +36,47 @@ namespace ShoppingListTests
         }
 
         [Test]
+        public void GetListWithNameCallsGetByName()
+        {
+            var name = "Aspalls";
+
+            // Act
+            var result = this.ShoppingList.GetShoppingList(name);
+
+            // Assert
+            this.MemoryStorageServiceMock.Verify(m => m.Get(name), Times.Once);
+        }
+
+        [Test]
         public void AddDrinkCallsMemoryServiceAdd()
         {
             var mockDrink = new Drink();
 
             // Act
-            this.ShoppingList.AddDrink(mockDrink);
+            this.ShoppingList.AddDrink(mockDrink.Name, mockDrink.Number.ToString());
 
             // Assert
-            this.MemoryStorageServiceMock.Verify(m => m.Add(mockDrink), Times.Once);
+            this.MemoryStorageServiceMock.Verify(m => m.Add(It.Is<Drink>(
+                d => d.Number == mockDrink.Number && 
+                d.Name == mockDrink.Name)), Times.Once);
+        }
+
+        [Test]
+        public void AddDrinkCallsMemoryServiceAddWithZeroIfNumberInvalid()
+        {
+            var mockDrink = new Drink
+            {
+                Name = "Pepsi",
+                Number = 2
+            };
+
+            // Act
+            this.ShoppingList.AddDrink(mockDrink.Name, "Not a number");
+
+            // Assert
+            this.MemoryStorageServiceMock.Verify(m => m.Add(It.Is<Drink>(
+                d => d.Number == 0 &&
+                d.Name == mockDrink.Name)), Times.Once);
         }
     }
 }

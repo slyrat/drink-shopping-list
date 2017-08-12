@@ -17,13 +17,19 @@ namespace ShoppingListService
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "GetShoppingList")]
-        List<Drink> GetShoppingList();
+            UriTemplate = "ShoppingList/{name}")]
+        List<Drink> GetShoppingList(string name = null);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET",
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "ShoppingList")]
+        List<Drink> GetShoppingListAll();
 
         [OperationContract]
         [WebInvoke(Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "AddDrink")]
-        void AddDrink(Drink drink);
+            UriTemplate = "ShoppingList/{name}/{number}")]
+        void AddDrink(string name, string number);
     }
 }

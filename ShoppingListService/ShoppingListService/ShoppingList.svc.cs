@@ -27,14 +27,35 @@ namespace ShoppingListService
             this.StorageService = storage;
         }
 
-        public void AddDrink(Drink drink)
+        public void AddDrink(string name, string number)
         {
-            this.StorageService.Add(drink);
+            if (!int.TryParse(number, out int amount))
+            {
+                amount = 0;
+            }
+
+            this.StorageService.Add(new Drink
+            {
+                Name = name,
+                Number = amount
+            });
         }
 
-        public List<Drink> GetShoppingList()
+        public List<Drink> GetShoppingList(string name = null)
         {
-            return this.StorageService.GetAll();
+            if (name == null)
+            {
+                return this.StorageService.GetAll();
+            }
+            else
+            {
+                return new List<Drink> { this.StorageService.Get(name) };
+            }
+        }
+
+        public List<Drink> GetShoppingListAll()
+        {
+            return GetShoppingList();
         }
     }
 }
