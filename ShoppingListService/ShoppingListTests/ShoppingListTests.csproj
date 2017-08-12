@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MemoryStorageTests.cs" />
+    <Compile Include="ShoppingListTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
