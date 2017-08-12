@@ -31,5 +31,17 @@ namespace ShoppingListService
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "ShoppingList/{name}/{number}")]
         void AddDrink(string name, string number);
+
+        [OperationContract]
+        [WebInvoke(Method = "PUT",
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "ShoppingList/{name}/{number}")]
+        void UpdateDrink(string name, string number);
+
+        [OperationContract]
+        [WebInvoke(Method = "DELETE",
+            ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "ShoppingList/{nameToDelete}")]
+        void Delete(string nameToDelete);
     }
 }

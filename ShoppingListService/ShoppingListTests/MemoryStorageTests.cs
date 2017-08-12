@@ -15,7 +15,7 @@ namespace ShoppingListTests
         [SetUp]
         public void Setup()
         {
-            this.Storage = new MemoryStorageService();
+            this.Storage = new MemoryStorageService(true);
         }
 
         [Test]
@@ -74,6 +74,16 @@ namespace ShoppingListTests
         }
 
         [Test]
+        public void GetWithInvalidKeyReturnsNull()
+        {
+            // Act
+            var result = Storage.Get("billy");
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
         public void StorageCanSaveAndRetrieveItem()
         {
             var cider = new Drink
@@ -114,6 +124,74 @@ namespace ShoppingListTests
             // Assert
             Assert.Contains(ale, result);
             Assert.Contains(cider, result);
+        }
+
+        [Test]
+        public void StorageCanUpdateADrink()
+        {
+            var cider = new Drink
+            {
+                Name = "Aspalls",
+                Number = 2
+            };
+
+            Storage.Add(cider);
+
+            cider.Number = 5;
+
+            // Act
+            Storage.Update(cider);
+            var result = Storage.Get(cider.Name);
+
+            // Assert
+            Assert.AreEqual(cider.Number, result.Number);
+        }
+
+        [Test]
+        public void UpdateWillNotAddIfNotPresent()
+        {
+            var cider = new Drink
+            {
+                Name = "Aspalls",
+                Number = 2
+            };
+
+            // Act
+            Storage.Update(cider);
+            var result = Storage.Get(cider.Name);
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void DeleteRemovesAnItem()
+        {
+            var cider = new Drink
+            {
+                Name = "Strongbow",
+                Number = 5
+            };
+
+            Storage.Add(cider);
+            Assert.IsNotNull(Storage.Get(cider.Name));
+
+            // Act
+            Storage.Delete(cider.Name);
+
+            var result = Storage.Get(cider.Name);
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void DeleteWithInvalidKeySucceeds()
+        {
+            // Act
+            Storage.Delete("Random Name");
+
+            // Assert is merely making sure exception isn't thrown above
         }
     }
 }

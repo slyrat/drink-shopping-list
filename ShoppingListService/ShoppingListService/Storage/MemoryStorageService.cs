@@ -9,9 +9,14 @@ namespace ShoppingListService.Storage
 {
     public class MemoryStorageService : IMemoryStorageService
     {
-        public MemoryStorageService()
+        public MemoryStorageService() : this(false)
         {
-            if (Storage == null)
+
+        }
+
+        public MemoryStorageService(bool forceNewCache = false)
+        {
+            if (Storage == null || forceNewCache)
             {
                 Storage = new MemoryCache("DrinkStorage");
             }
@@ -33,6 +38,11 @@ namespace ShoppingListService.Storage
         public Drink Get(string name)
         {
             var drinkStorage = GetDrinkStorage();
+            if (!drinkStorage.ContainsKey(name))
+            {
+                return null;
+            }
+
             var result = drinkStorage[name];
             return result;
         }
@@ -53,6 +63,26 @@ namespace ShoppingListService.Storage
             }
 
             return result;
+        }
+
+        public void Update(Drink cider)
+        {
+            var drinkStorage = GetDrinkStorage();
+            if (drinkStorage.ContainsKey(cider.Name))
+            {
+                drinkStorage[cider.Name].Number = cider.Number;
+                Storage[DrinkStorageKey] = drinkStorage;
+            }
+        }
+
+        public void Delete(string name)
+        {
+            var drinkStorage = GetDrinkStorage();
+            if (drinkStorage.ContainsKey(name))
+            {
+                drinkStorage.Remove(name);
+                Storage[DrinkStorageKey] = drinkStorage;
+            }
         }
     }
 }

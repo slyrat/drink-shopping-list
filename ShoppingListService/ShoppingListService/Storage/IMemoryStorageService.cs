@@ -12,5 +12,7 @@ namespace ShoppingListService.Storage
         Drink Get(string name);
         List<Drink> GetAll();
         Dictionary<string, Drink> GetDrinkStorage();
+        void Update(Drink cider);
+        void Delete(string name);
     }
 }

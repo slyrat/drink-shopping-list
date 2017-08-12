@@ -41,6 +41,11 @@ namespace ShoppingListService
             });
         }
 
+        public void Delete(string nameToDelete)
+        {
+            this.StorageService.Delete(nameToDelete);
+        }
+
         public List<Drink> GetShoppingList(string name = null)
         {
             if (name == null)
@@ -56,6 +61,20 @@ namespace ShoppingListService
         public List<Drink> GetShoppingListAll()
         {
             return GetShoppingList();
+        }
+
+        public void UpdateDrink(string name, string number)
+        {
+            if (!int.TryParse(number, out int amount))
+            {
+                amount = 0;
+            }
+
+            this.StorageService.Update(new Drink
+            {
+                Name = name,
+                Number = amount
+            });
         }
     }
 }

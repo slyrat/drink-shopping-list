@@ -78,5 +78,49 @@ namespace ShoppingListTests
                 d => d.Number == 0 &&
                 d.Name == mockDrink.Name)), Times.Once);
         }
+
+        [Test]
+        public void UpdateCallsMemoryUpdate()
+        {
+            var testName = "test";
+            var testNumber = 3;
+
+            // Act
+            this.ShoppingList.UpdateDrink(testName, testNumber.ToString());
+
+            // Assert
+            this.MemoryStorageServiceMock.Verify(m => m.Update(It.Is<Drink>(
+                d => d.Name == testName && d.Number == testNumber)), Times.Once);
+        }
+
+        [Test]
+        public void UpdateDrinkCallsMemoryServiceUpdateWithZeroIfNumberInvalid()
+        {
+            var mockDrink = new Drink
+            {
+                Name = "Pepsi",
+                Number = 2
+            };
+
+            // Act
+            this.ShoppingList.UpdateDrink(mockDrink.Name, "Not a number");
+
+            // Assert
+            this.MemoryStorageServiceMock.Verify(m => m.Update(It.Is<Drink>(
+                d => d.Number == 0 &&
+                d.Name == mockDrink.Name)), Times.Once);
+        }
+
+        [Test]
+        public void DeleteCallsMemoryServiceCorrectly()
+        {
+            var nameToDelete = "deleteMe";
+
+            // Act
+            this.ShoppingList.Delete(nameToDelete);
+
+            // Assert
+            this.MemoryStorageServiceMock.Verify(m => m.Delete(nameToDelete), Times.Once);
+        }
     }
 }
