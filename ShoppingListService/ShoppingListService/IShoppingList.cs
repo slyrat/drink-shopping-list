@@ -23,8 +23,8 @@ namespace ShoppingListService
         [OperationContract]
         [WebInvoke(Method = "GET",
             ResponseFormat = WebMessageFormat.Json,
-            UriTemplate = "ShoppingList")]
-        List<Drink> GetShoppingListAll();
+            UriTemplate = "ShoppingList?pageSize={pageSize}&page={page}&sortAscending={sortAscending}&sortBy={sortBy}")]
+        List<Drink> GetShoppingListAll(int pageSize = 0, int page = 0, bool sortAscending = true, string sortBy = null);
 
         [OperationContract]
         [WebInvoke(Method = "POST",

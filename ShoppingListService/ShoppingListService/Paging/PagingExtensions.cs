@@ -15,7 +15,7 @@ namespace ShoppingListService.Paging
             bool sortAscending = true)
             where T:  new()
         {
-            if (sortByProperty != null)
+            if (!string.IsNullOrWhiteSpace(sortByProperty))
             {
                 var propertyInfo = typeof(T).GetProperty(sortByProperty);
                 // do sorting

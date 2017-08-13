@@ -7,6 +7,7 @@ using System.ServiceModel.Web;
 using System.Text;
 using ShoppingListService.Contracts;
 using ShoppingListService.Storage;
+using ShoppingListService.Paging;
 
 namespace ShoppingListService
 {
@@ -58,9 +59,14 @@ namespace ShoppingListService
             }
         }
 
-        public List<Drink> GetShoppingListAll()
+        public List<Drink> GetShoppingListAll(
+            int pageSize = 0, 
+            int page = 0,
+            bool sortAscending = true,
+            string sortBy = null)
         {
-            return GetShoppingList();
+            var result = GetShoppingList();
+            return result.PageAndSort(pageSize, page, sortBy, sortAscending);
         }
 
         public void UpdateDrink(string name, string number)

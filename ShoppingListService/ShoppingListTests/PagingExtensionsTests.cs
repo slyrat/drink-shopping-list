@@ -92,5 +92,25 @@ namespace ShoppingListTests
                 Assert.AreEqual(ExpectedNameOfFirstItem, data[0].Name);
             }
         }
+
+        [TestCase(1, 1, 1, "Aspalls")]
+        [TestCase(2, 1, 2, "Aspalls")]
+        [TestCase(2, 2, 2, "Guinness")]
+        [TestCase(2, 3, 1, "Strongbow")]
+        [TestCase(3, 3, 0, "")] // Assumes that if you try to get beyond end, just give them empty list
+        public void PageAndSort_PagesAndSortsCorrectly(int pageSize, int page, int ExpectedCount, string ExpectedNameOfFirstItem)
+        {
+            var data = GetDrinkData();
+
+            // Act
+            data = data.PageAndSort(page: page, pageSize: pageSize, sortByProperty: "Name");
+
+            // Assert
+            Assert.AreEqual(ExpectedCount, data.Count, "count did not match");
+            if (ExpectedCount > 0)
+            {
+                Assert.AreEqual(ExpectedNameOfFirstItem, data[0].Name);
+            }
+        }
     }
 }

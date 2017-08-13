@@ -28,8 +28,24 @@ namespace ShoppingListTests
         [Test]
         public void GetListCallsMemoryService()
         {
+            // Setup
+            this.MemoryStorageServiceMock.Setup(m => m.GetAll()).Returns(new List<Drink>());
+
             // Act
             var result = this.ShoppingList.GetShoppingList();
+
+            // Assert
+            this.MemoryStorageServiceMock.Verify(m => m.GetAll(), Times.Once);
+        }
+
+        [Test]
+        public void GetListCanPageAndSort()
+        {
+            // Setup
+            this.MemoryStorageServiceMock.Setup(m => m.GetAll()).Returns(new List<Drink>());
+
+            // Act
+            var result = this.ShoppingList.GetShoppingListAll(pageSize: 3, page: 1, sortBy: "Name", sortAscending: false);
 
             // Assert
             this.MemoryStorageServiceMock.Verify(m => m.GetAll(), Times.Once);
