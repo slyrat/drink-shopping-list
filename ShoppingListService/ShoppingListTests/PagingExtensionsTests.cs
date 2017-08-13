@@ -73,6 +73,18 @@ namespace ShoppingListTests
             Assert.AreEqual("Aspalls", data[0].Name);
         }
 
+        [Test]
+        public void PageAndSort_DoesNotSortIfPropertyNotPresent()
+        {
+            var data = GetDrinkData();
+
+            // Act
+            data = data.PageAndSort(sortByProperty: "RandomName");
+
+            // Assert
+            Assert.AreEqual("Coke", data[0].Name);
+        }
+
         [TestCase(1, 1, 1, "Coke")]
         [TestCase(2, 1, 2, "Coke")]
         [TestCase(2, 2, 2, "Aspalls")]
